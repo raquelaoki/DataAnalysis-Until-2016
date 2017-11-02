@@ -1,0 +1,288 @@
+\documentclass[a4paper,12pt, titlepage]{article}
+
+\usepackage[brazilian]{babel}                   %idioma 
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage[utf8]{inputenc}                   %acento
+\usepackage[T1]{fontenc} 
+\usepackage{lscape}                             % mudar orientacao
+\usepackage[top=3cm,left=3cm,right=2cm,bottom=2cm]{geometry} %margens
+\usepackage[table]{xcolor}          % colorir linhas de tabelas    
+\usepackage{multirow}               % mesclar linhas
+\usepackage{longtable}                % tabelas em mais de uma página
+\usepackage[center]{caption}
+\captionsetup[table]{font=bf,position=below}  % legenda tabelas negrito e centralizadas
+\captionsetup[figure]{font=bf,position=below} % legenda imagens negrito e centralizadas
+\usepackage{natbib}
+\usepackage{float}                  % posicionamento das tabelas
+\usepackage{blindtext}
+\usepackage{changepage}
+\usepackage{indentfirst}           % primeira linha indentada
+\usepackage{scrextend}
+\usepackage[maxfloats=100]{morefloats}
+\usepackage{setspace}
+
+\begin{document}
+
+
+
+\begin{titlepage}
+\begin{center}
+
+\huge {Raquel Aoki}
+%\vspace{0.3cm}
+%\textsc{ \large PRÓ-REITORIA DE GRADUAÇÃO}\\
+%\vspace{0.3cm}
+%\textsc{ \large UNIVERSIDADE FEDERAL DE MINAS GERAIS}\\
+
+\vspace{8cm}
+{\setlength{\baselineskip}{3\baselineskip}
+{ \huge {Game of Thrones} }}% fecha espaçamento
+
+ % fecha espaçamento
+
+\vspace{10cm}
+{ \large \uppercase{Belo Horizonte}} \\
+\vspace{0.3cm}
+{ \large \uppercase{Novembro de 2016} }
+
+\end{center}
+\end{titlepage}
+
+\section{Introdução}
+
+\begin{doublespace}
+Nesse relatório será apresentado uma análise descritiva dos livros da série \textit{Game of Thrones}. Aclamada no mundo todo, \textit{Game of Thrones} é uma série de livros escrita por George R. R. Martin e se passa em um mundo fictício chamado Westeros. O primeiro livro da série, A Guerra dos Tronos, foi publicado em 1993. Desde então foram publicados mais 4 livros: A Fúria dos Reis, A Tormenta das Espadas, O Festim dos Corvos e A Dança dos Dragões. Os fãs da série ainda esperam por mais 2 livros que irão finalizar a história que até o momento está incompleta e cheia de segredos para serem revelados. Em 2011, a série de livros foi adaptada para a TV através da HBO, o que contribuiu fortemente para sua popularização. 
+
+Duas bases de dados com informações sobre as batalhas ocorridas e personagens que morreram nos livros serão analisadas neste documento. As bases de dados estão disponíveis em "https://www.kaggle.com/mylesoneill/game-of-thrones". O download das bases foi feito no dia 15 de Novembro de 2016. 
+
+As análises e o relatório foram desenvolvidos utilizando o \textit{software} livre R e o LaTeX integrados no RSudio. 
+
+\end{doublespace}
+
+\newpage
+\section{Resultados}
+<<bloco1,echo=FALSE,results='hide',message=FALSE, warning=FALSE>>=
+rm(list = ls( all = T))
+setwd("C:\\Users\\Raquel Aoki\\Documents\\Processo Seletiov Hekima")
+bd1 = read.csv("battles.csv", header = T , stringsAsFactors=TRUE)
+bd2 = read.csv("character-deaths.csv", header = T , stringsAsFactors=TRUE)
+bd3 = read.csv("character-predictions.csv", header = T , stringsAsFactors=TRUE)
+
+require(igraph)
+require(xtable)
+
+@
+\subsection{As Batalhas}
+\begin{doublespace}
+
+Entre os anos 298 e 300 ocorreram 38 batalhas entre as Casas de Westeros. A Figura \ref{bloco2}(a) mostra que o ano com  mais batalhas foi 299 (52.63\% das batalhas). Com relação ao tamanho dos exércitos, a Figura \ref{bloco2}(b)\footnote{Para uma melhor visualização dos dados foi retirada a \textit{Battle of Castle Black} que ocorreu entre o Povo Livre e a Patrulha da Noite. Nessa batalha, o povo de Mance Rayder atacou com um exército de 100000 selvagens contra 1240 patrulheiros} mostra que o tamanho mediano dos exércitos de defesa eram maiores que o tamanho mediano dos exércitos de ataque. 
+
+A Figura \ref{bloco3}(a) mostra um grafos com a relação entre as principais casas atacantes e defensoras nas batalhas. Cada nó do grafo representa uma casa de Westeros e as setas apontam da casa atacante para a casa atacada. As cores representam o resultado das batalhas:
+\begin{itemize}
+\item Verde: A casa atacante vence;
+\item Vermelho: A casa atacante perde;
+\item Azul: Sem Resultado;
+\end{itemize}
+A partir dessas informações, é possível observar que as casas atacantes em geral vencem as batalhas. Considerando a densidade de setas que representam batalhas, nota-se que a maior parte das batalhas ocorreram entre as casas Lannister, Stark, Greyjoy e Tully. Além disso, há duas batalhas entre casas desconectadas das demais. Já a Figura \ref{bloco3}(b) mostra um grafo com as relações entre todas as casas atacantes e todas as casas atacadas. Nesse grafo, todas as casas estão conectadas. De acordo com o grafo, o centro das batalhas é a Casa Lannister. 
+
+\begin{landscape}
+
+\begin{figure}[!h]
+<<bloco2, echo=FALSE, results='hide', fig.height=8, fig.width=12>>=
+par(mfrow=c(1,2))
+
+tab1 = table(bd1$year)
+tab1 = tab1*100/sum(tab1)
+barplot(tab1, ylab="Percentual",axes=F,xlab="Ano",col="dodgerblue3", main="(a)", ylim = c(0,60))
+axis(2,seq(0,60,10),paste(seq(0,60,10),"%"))
+abline(h = seq(0,60,10), col="grey", lty=2)
+barplot(tab1, axes=F,ylim = c(0,60), add=T,col="dodgerblue3")
+
+tab2 = data.frame(bd1[,18],rep("Ataque"))
+names(tab2)=c("Tamanho","Tipo")
+tab2.aux = data.frame(bd1[,19],rep("Defesa"))
+names(tab2.aux) = names(tab2)
+tab2 = rbind(tab2, tab2.aux)
+tab2 = subset(tab2, Tamanho<100000)
+boxplot(tab2$Tamanho~tab2$Tipo, col = "dodgerblue3", main="(b)", ylab="Tamanho do Exército")
+@
+\caption{(a): Quantidade de batalhas por ano; (b): Tamanho dos Exercítos }
+\label{bloco2}
+\end{figure}
+
+\begin{figure}[!h]
+<<bloco3, echo=FALSE, results='hide', message=FALSE, warning=FALSE, fig.width=16,fig.height=11>>=
+
+
+setas = data.frame(bd1$attacker_1, bd1$defender_1, bd1$attacker_outcome)
+setas = subset(setas,bd1.attacker_1!="")
+setas = subset(setas,bd1.defender_1!="")
+cor.seta = as.character(setas[,3])
+cor.seta[cor.seta=="win"]="green3"
+cor.seta[cor.seta=="loss"]="red2"
+cor.seta[cor.seta==""]="royalblue3"
+setas = setas[,-3]
+setas = data.frame(t(setas))
+setas = unlist(setas)
+setas = as.character(setas)
+n = length(unique(setas))
+g1 <- graph(setas)
+g1 <- simplify( g1, remove.loops = F, remove.multiple = F )
+casas = data.frame(row.names(cbind(V(g1))),1:16);names(casas)=c("casa","aux")
+casas2 = data.frame(table(setas));names(casas2)=c("casa","freq")
+casas = merge(casas,casas2,by.x="casa",by.y="casa",all=T)
+casas = casas[order(casas$aux),]
+casas$freq = (casas$freq+10)*0.6
+E(g1)$type = 1:(length(setas)/2); E(g1)$weight <- 10 
+
+par(mfrow=c(1,2))
+plot(g1,vertex.size = 8, edge.arrow.size=.8, vertex.color="gray70", vertex.frame.color="gray70", vertex.label.color="black", vertex.label.cex=1.2, vertex.label.dist=0.5,  edge.color = cor.seta )
+
+
+setas1 = data.frame(bd1$attacker_1, bd1$defender_1, bd1$attacker_outcome);names(setas1)=c("attacker","defender","res")
+setas2 = data.frame(bd1$attacker_1, bd1$defender_2, bd1$attacker_outcome);names(setas2)=c("attacker","defender","res")
+setas3 = data.frame(bd1$attacker_1, bd1$defender_3, bd1$attacker_outcome);names(setas3)=c("attacker","defender","res")
+setas4 = data.frame(bd1$attacker_1, bd1$defender_4, bd1$attacker_outcome);names(setas4)=c("attacker","defender","res")
+setas5 = data.frame(bd1$attacker_2, bd1$defender_1, bd1$attacker_outcome);names(setas5)=c("attacker","defender","res")
+setas6 = data.frame(bd1$attacker_2, bd1$defender_2, bd1$attacker_outcome);names(setas6)=c("attacker","defender","res")
+setas7 = data.frame(bd1$attacker_2, bd1$defender_3, bd1$attacker_outcome);names(setas7)=c("attacker","defender","res")
+setas8 = data.frame(bd1$attacker_2, bd1$defender_4, bd1$attacker_outcome);names(setas8)=c("attacker","defender","res")
+setas9 = data.frame(bd1$attacker_3, bd1$defender_1, bd1$attacker_outcome);names(setas9)=c("attacker","defender","res")
+setas10 = data.frame(bd1$attacker_3, bd1$defender_2, bd1$attacker_outcome);names(setas10)=c("attacker","defender","res")
+setas11 = data.frame(bd1$attacker_3, bd1$defender_3, bd1$attacker_outcome);names(setas11)=c("attacker","defender","res")
+setas12 = data.frame(bd1$attacker_3, bd1$defender_4, bd1$attacker_outcome);names(setas12)=c("attacker","defender","res")
+setas13 = data.frame(bd1$attacker_4, bd1$defender_1, bd1$attacker_outcome);names(setas13)=c("attacker","defender","res")
+setas14 = data.frame(bd1$attacker_4, bd1$defender_2, bd1$attacker_outcome);names(setas14)=c("attacker","defender","res")
+setas15 = data.frame(bd1$attacker_4, bd1$defender_3, bd1$attacker_outcome);names(setas15)=c("attacker","defender","res")
+setas16 = data.frame(bd1$attacker_4, bd1$defender_4, bd1$attacker_outcome);names(setas16)=c("attacker","defender","res")
+
+setas = rbind(setas1,setas2,setas3  ,setas4  ,setas5  ,setas6  ,setas7  ,setas8 ,setas9,setas10 ,setas11 ,setas12 ,setas13 ,setas14 ,setas15 ,setas16)
+rm(setas1,setas2,setas3  ,setas4  ,setas5  ,setas6  ,setas7  ,setas8 ,setas9,setas10 ,setas11 ,setas12 ,setas13 ,setas14 ,setas15 ,setas16)
+setas = subset(setas,attacker!="")
+setas = subset(setas,defender!="")
+setas = subset(setas,!is.na(attacker))
+setas = subset(setas,!is.na(defender))
+
+cor.seta = as.character(setas[,3])
+cor.seta[cor.seta=="win"]="green3"
+cor.seta[cor.seta=="loss"]="red2"
+cor.seta[cor.seta==""]="royalblue3"
+setas = setas[,-3]
+setas = data.frame(t(setas))
+setas = unlist(setas)
+setas = as.character(setas)
+setas[setas=="Brotherhood without Banners"]="Brotherhood"
+n = length(unique(setas))
+g1 <- graph(setas)
+g1 <- simplify( g1, remove.loops = F, remove.multiple = F )
+casas = data.frame(row.names(cbind(V(g1))),1:21);names(casas)=c("casa","aux")
+casas2 = data.frame(table(setas));names(casas2)=c("casa","freq")
+casas = merge(casas,casas2,by.x="casa",by.y="casa",all=T)
+casas = casas[order(casas$aux),]
+casas$freq = (casas$freq+10)*0.6
+E(g1)$type = 1:(length(setas)/2); E(g1)$weight <- 10 
+plot(g1,vertex.size = 8, vertex.color="gray70", vertex.frame.color="gray70", vertex.label.color="black", vertex.label.cex=1, vertex.label.dist=0.5,  edge.color = cor.seta, layout = layout_as_star  ) #
+@
+\caption{(a)Grafo entre as principais casas atacantes e defensoras; (b)Grafo entre todas as casas atacantes e defensoras}
+\label{bloco3}
+\end{figure}
+\end{landscape}
+
+Através da Tabela \ref{bloco5} é possível observar de maneira mais clara a quantidade de batalhas em que cada uma das casas esteve envolvida. A Casa Lannister, como mostrado na Figura \ref{bloco3}(b), foi a que mais esteve envolvida em batalhas, sendo 18 no total (9 como atacante). Em segundo está a Casa Stark com  16 batalhas (8 como atacante) e com 11 batalhas estão empatadas as Casas Greyjoy (8 ataques) e Batatheon (6 ataques).  
+
+A Tabela \ref{bloco5} mostra a distribuição das batalhas por Westeros, de onde é possível notar que as região com mais batalhas \textit{The Riverland}(44.74\%) e \textit{The North}(26.32\%).
+
+
+<<bloco5b,echo=FALSE,results='asis' >>=
+at = unlist(c(as.character(bd1$attacker_1),as.character(bd1$attacker_2),as.character(bd1$attacker_3)
+              ,as.character(bd1$attacker_4)))
+
+df = unlist(c(as.character(bd1$defender_1),as.character(bd1$defender_2),as.character(bd1$defender_3)
+              ,as.character(bd1$defender_4)))
+
+at = subset(at, !is.na(at) & at!="")
+df = subset(df, !is.na(df) & df!="")
+
+at = data.frame(table(at))
+df = data.frame(table(df))
+tab3 = merge(at,df,by.x="at",by.y="df",all=T)
+names(tab3) = c("Casa","Ataques","Defesas")
+tab3[is.na(tab3)]=0
+tab3$Total = tab3$Ataques+tab3$Defesas
+
+xtab3 = xtable(tab3,align = "rc|c|c|c",digits=0,caption = "Quantidade de ataques e defesas realizados por cada Casa}\\label{bloco5b")
+print(xtab3,caption.placement='top',table.placement="H", include.rownames = F, include.colnames=T )
+
+@
+
+
+
+
+
+<<bloco5, echo=FALSE,results='asis'>>=
+tab1 = data.frame(table(bd1$region))
+tab1$perc  = paste(round(tab1$Freq*100/sum(tab1$Freq),2),"%",sep="")
+names(tab1) = c("Região","Frequência","Percentual")
+xtab1 = xtable(tab1,align = "rc|c|c",caption = "Distribuição das Batalhas por Westeros}\\label{bloco5")
+print(xtab1,caption.placement='top',table.placement="H", include.rownames = F, include.colnames=T )
+
+@
+
+
+
+
+
+\end{doublespace}
+
+\newpage
+\subsection{As Mortes}
+\begin{doublespace}
+
+O ano em que mais mortes ocorreram foi 299, como pode ser visto na Figura \ref{bloco7}(a). Uma explicação para o ano de 299 ter sido o mais sangrento é o fato que a maior partes das batalhas ocorreram nesse mesmo ano, como foi mostrado na Figura \ref{bloco2}. A Figura \ref{bloco7}(b) mostra a quantidade de mortes de cada livro. Nota-se que o livro 3 (A Tormenta das Espadas) foi o livro com mais mortes e em segundo lugar o livro 2 (A Fúria dos Reis). 
+
+A Figura \ref{bloco9}(a) mostra a quantidade de pessoas mortas por gênero, de onde observa-se que 82,88\% dos mortos são do sexo masculino. Com relação a nobreza, a Figura \ref{bloco9}(b) mostra que uma proporção muito próxima de nobres (46.89\%) e pessoas comuns (53.11\%) morreram. 
+
+\begin{figure}[!h]
+<<bloco7, echo=FALSE,results='hide', fig.height=8, fig.width=12>>=
+par(mfrow=c(1,2))
+barplot(table(bd2$Death.Year), col="tomato2", ylab="Número de Mortos", xlab="Ano", main="(a)")
+barplot(table(bd2$Book.of.Death),col="tomato2", ylab="Número de Mortos", xlab="Livro",main="(b)")
+@
+\caption{Número de mortos por ano e por livro}
+\label{bloco7}
+\end{figure}
+
+\begin{figure}[!h]
+<<bloco9, echo=FALSE,results='hide',message=FALSE,fig.height=8, fig.width=12>>=
+require(plotrix)
+par(mfrow=c(1,2))
+p1 = table(bd2$Gender)*100/sum(table(bd2$Gender))
+label1 = c(paste("Feminino (", round(p1[1],2),"%)",sep=""),paste("Masculino (",round(p1[2],2),"%)",sep=""))
+pie3D(p1,labels=label1,start=2,explode=0.1,main="(a)",mar=c(3,3,3,3),
+	labelcex=0.9,radius=0.8,theta=0.9,border=c("white"),	col=c("red","darkred"))
+
+p2 = table(bd2$Nobility)*100/sum(table(bd2$Nobility))
+label2 = c(paste("Comum (",round(p2[1],2),"%)",sep=""),paste("Nobre (",round(p2[2],2),"%)",sep=""))
+pie3D(p2,labels=label2,start=2,explode=0.1,main="(a)",mar=c(3,3,3,3),
+	labelcex=0.9,radius=0.8,theta=0.9,border=c("white"),	col=c("red","darkred"))
+@
+\caption{(a) Quantidade de Mortos por gênero; (b) Quantidade de Nobres Mortos}
+\label{bloco9}
+\end{figure}
+
+Em Westeros algumas pessoas escolhem por se aliar a alguma grande casa e a Tabela \ref{bloco8} mostra a quantidade de aliados mortos de cada Casa e de pessoas sem alianças. A maior parte dos que morreram não pertenciam a nenhuma casa (27.59\%), seguido pela Patrulha da Noite (12.65\%), pela Casa Stark (11.78\%) e Lannister (11.12\%). 
+
+<<bloco8, echo=FALSE,results='asis'>>=
+bd2$Allegiances = gsub("House ","",bd2$Allegiances)
+tab2 = data.frame(table(bd2$Allegiances))
+tab2$perc = paste(round(tab2$Freq*100/sum(tab2$Freq),2),"%",sep="")
+names(tab2) = c("Casa","Frequência","Percentual")
+xtab2 = xtable(tab2,align = "rc|c|c",caption = "Mortos por Casa de Westeros}\\label{bloco8")
+print(xtab2,caption.placement='top',table.placement="H", include.rownames = F, include.colnames=T )
+@
+
+
+\end{doublespace}
+
+\end{document}
