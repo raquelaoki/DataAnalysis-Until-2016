@@ -7,6 +7,7 @@ Small projects using R (2014-2016)
 3) ITR: Item Theory Response analysis to measure the political knowledge of university students in Brazil
 
 4) ML_FinalAssignment_2015: Machine Learning Course Project - 2015 - UFMG 
+
 Group: Raquel Aoki and Fabrício Rodrigues Inácio
 Project: Classification model of supermarket products (Source: https://www.kaggle.com/c/otto-group-product-classification-challenge)
 
