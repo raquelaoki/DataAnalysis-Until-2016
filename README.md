@@ -1,13 +1,13 @@
 # DataAnalysis-Until-2016
-Small projects using R (2014-2016)
+Small Data Science Projects (2014-2016)
 
-1) Undergrad_FinalProject_2014: Final Project required for BS in Statistics   
+1) *Undergrad_FinalProject_2014*: Final Project required for BS in Statistics   
 Supervisor: Fabio Demarqui   
 Project: Generalized Linear Model to evaluate the students performance in Calculus class   
 Summary: In this project we compare the performance of students from different departaments in the Universidade Federal de Minas Gerais using a GLM model. 
 Note: Report is in Portuguese   
 
-2) GameOfThrones_2016: Graphics and other descriptive statistics about a Game of Thrones dataset   
+2) *GameOfThrones_2016*: Graphics and other descriptive statistics about a Game of Thrones dataset   
 Data Source: https://kaggle.com/mylesoneill/game-of-thrones  
 Note: Report is in Portuguese   
 
