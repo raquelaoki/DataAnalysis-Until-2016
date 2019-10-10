@@ -7,9 +7,9 @@ Project: Generalized Linear Model to evaluate the students performance in Calcul
 Summary: In this project we compare the performance of students from different departaments in the Universidade Federal de Minas Gerais using a GLM model. 
 Note: Report is in Portuguese   
 
-2) GameOfThrones_2016: Graphics and other descriptive statistics about a Game of Thrones dataset 
-Data Source: https://kaggle.com/mylesoneill/game-of-thrones
-Note: Report is in Portuguese  
+2) GameOfThrones_2016: Graphics and other descriptive statistics about a Game of Thrones dataset   
+Data Source: https://kaggle.com/mylesoneill/game-of-thrones  
+Note: Report is in Portuguese   
 
 3) ITR: Item Theory Response analysis to measure the political knowledge of university students in Brazil
 
