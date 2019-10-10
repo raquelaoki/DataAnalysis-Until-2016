@@ -11,7 +11,10 @@ Note: Report is in Portuguese
 Data Source: https://kaggle.com/mylesoneill/game-of-thrones  
 Note: Report is in Portuguese   
 
-3) **ITR**: Item Theory Response analysis to measure the political knowledge of university students in Brazil
+3) **Undergrad_ResearchProject_2014**: Item Theory Response(ITR) analysis to measure the political knowledge of university students in Brazil  
+Data: We collected the dataset for a course project  
+Summary: Descriptive Analysis and ITR models to compare the political knowledge of university students.  
+Note: Report is in Portuguese  
 
 4) **ML_FinalAssignment_2015**: Machine Learning Course Project - 2015 - UFMG  
 Group: Raquel Aoki and Fabrício Rodrigues Inácio  
