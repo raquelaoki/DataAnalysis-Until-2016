@@ -23,7 +23,7 @@ Summary: The goal of this project was predict 9 labels from the dataset with 93 
 Note: Report is in Portuguese  
 
 
-5) **Stats4Good**: Workshop Stats4Good presentation - 2016 - UFMG 
-Summary: Short description about me and my Undergrad_ResearchProject_2014. 
-Code: Plots made speficit for this presentation
-Note: Presentation is in Portuguese 
+5) **Stats4Good**: Workshop Stats4Good presentation - 2016 - UFMG   
+Summary: Short description about me and my Undergrad_ResearchProject_2014.  
+Code: Plots made speficit for this presentation  
+Note: Presentation is in Portuguese   
