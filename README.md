@@ -1,7 +1,11 @@
 # DataAnalysis-Until-2016
 Small projects using R (2014-2016)
 
-1) GLM_tcc2014: Generalized Linear Model to evaluate the students performance in Calculus class 
+1) Undergrad_FinalProject_2014: Final Project required for BS in Statistics   
+Supervisor: Fabio Demarqui   
+Project: Generalized Linear Model to evaluate the students performance in Calculus class   
+Note: Report is in Portuguese   
+Summary: In this project we compare the performance of students from different departaments in the Universidade Federal de Minas Gerais using a GLM model. 
 
 2) GoT: Graphics and other descriptive statistics about a Game of Thrones dataset 
 3) ITR: Item Theory Response analysis to measure the political knowledge of university students in Brazil
