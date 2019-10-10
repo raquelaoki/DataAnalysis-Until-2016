@@ -1,8 +1,0 @@
-metodo tempo
-svm 475.5685
-svm_pca2 445.0008
-svm_rbm10_pca2 158.2927
-svm_rbm100_pca2 167.8542
-svm_pca1  116.9532
-svm_rbm10_pca1 67.85933
-svm_rbm100_pca1 69.8375 
